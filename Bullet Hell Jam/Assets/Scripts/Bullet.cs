@@ -4,19 +4,28 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
+    public BulletStats bulletStats;
+
     public Vector2  velocity;
-    public float    acceleration;
+    private float lifeTimeRemaining;
 
     public ObjectPool<Bullet> parentPool;
-    private float lifeTime = 2;
-    private const float maxLife = 2;
+
+    private void Start() {
+        // set color
+        SpriteRenderer spriteComponent = GetComponent<SpriteRenderer>();
+        spriteComponent.color = bulletStats.color;
+        // set lifespan
+        lifeTimeRemaining = bulletStats.lifeTime;
+
+    }
 
     private void Update() {
 
-        if (lifeTime >= 0) {
-            lifeTime -= Time.deltaTime;
+        if (lifeTimeRemaining >= 0) {
+            lifeTimeRemaining -= Time.deltaTime;
         } else {
-            lifeTime = maxLife;
+            lifeTimeRemaining = bulletStats.lifeTime;
             parentPool.ReturnObject(this);
         }
     }
