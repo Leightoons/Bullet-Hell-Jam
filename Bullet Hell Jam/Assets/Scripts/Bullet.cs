@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour {
     private const float maxLife = 2;
 
     private void Update() {
+
         if (lifeTime >= 0) {
             lifeTime -= Time.deltaTime;
         } else {

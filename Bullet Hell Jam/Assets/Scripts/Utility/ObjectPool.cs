@@ -36,15 +36,15 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
         return pooledObject;
     }
 
-
     /// <summary>
     /// Returns an object from the pool. Returns null if there are no more objects free in the pool.
     /// </summary>
     /// <returns>Object of type T from the pool.</returns>
     public T Get() {
-        //var numFree = m_freeList.Count;
-        //if (numFree <= 0)
-        //   return null;
+        if (m_freeList.Count <= 0) {
+            Debug.Log("Pool empty: Instantiating new object into pool");
+            InstantiatePooledObject();
+        }
 
         // Pull an object from the end of the free list.
         var pooledObject = m_freeList.Dequeue();
