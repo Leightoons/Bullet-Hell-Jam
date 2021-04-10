@@ -15,20 +15,33 @@ public class ObjectPool : MonoBehaviour {
         GameObject _new;
         for (int i = 0; i < poolSize; i++) {
             _new = Instantiate<GameObject>(_obj);
+            ImprintPool(_new);
             _pool.Enqueue(_new);
         }
 
     }
 
     public GameObject GetFromPool() {
+
+        if (_pool.Count <= 0) {
+            GameObject _new = Instantiate<GameObject>(_obj);
+            ImprintPool(_new);
+            _pool.Enqueue(_new);
+        }
+
         GameObject newObject = _pool.Dequeue();
         newObject.SetActive(true);
         return newObject;
     }
 
     public void ReturnToPool(GameObject _obj) {
-        _obj.SetActive(false);
         _pool.Enqueue(_obj);
+        _obj.SetActive(false);
+    }
+
+    public void ImprintPool(GameObject _obj) {
+        _obj.GetComponent<Bullet>().SetPool(this);
+        Debug.Log("pool set to " + this+" of type "+this.GetType());
     }
 
 }
