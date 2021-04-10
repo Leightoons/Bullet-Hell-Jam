@@ -8,20 +8,25 @@ using UnityEngine;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
+    #region // Class variables //
+
     [Tooltip("Prefab for this object pool")]
-    public T m_prefab;
+    //[SerializeField]
+    public T _prefab;
 
     [Tooltip("Initial size of this object pool")]
-    public int m_size;
+    [SerializeField]
+    private int _size;
 
-    private Queue<T> m_freeList;
+    private Queue<T> _poolQueue;
 
+    #endregion
 
     public void Awake() {
-        m_freeList = new Queue<T>();
+        _poolQueue = new Queue<T>();
         // Instantiate the pooled objects and disable them.
-        for (var i = 0; i < m_size; i++) {
-            T _new = InstantiatePooledObject();
+        for (var i = 0; i < _size; i++) {
+            //T newInst = InstantiatePooledObject();
         }
     }
 
@@ -31,9 +36,9 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
     /// </summary>
     /// <returns>Newly created object of type T from the pool.</returns>
     public virtual T InstantiatePooledObject() {
-        var pooledObject = Instantiate(m_prefab, transform);
+        var pooledObject = Instantiate(_prefab, transform);
         pooledObject.gameObject.SetActive(false);
-        m_freeList.Enqueue(pooledObject);
+        _poolQueue.Enqueue(pooledObject);
         return pooledObject;
     }
 
@@ -42,12 +47,12 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
     /// </summary>
     /// <returns>Object of type T from the pool.</returns>
     public T Get() {
-        if (m_freeList.Count <= 0) {
+        if (_poolQueue.Count <= 0) {
             Debug.Log("Pool empty: Instantiating new object into pool");
             InstantiatePooledObject();
         }
         // Pull an object from the queue.
-        var pooledObject = m_freeList.Dequeue();
+        var pooledObject = _poolQueue.Dequeue();
         return pooledObject;
     }
 
@@ -57,7 +62,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
     /// <param name="pooledObject">Object previously obtained from this ObjectPool</param>
     public void ReturnObject(T pooledObject) {
         // Put the pooled object back into the queue.
-        m_freeList.Enqueue(pooledObject);
+        _poolQueue.Enqueue(pooledObject);
 
         // Reparent the pooled object to us, and disable it.
         var pooledObjectTransform = pooledObject.transform;
