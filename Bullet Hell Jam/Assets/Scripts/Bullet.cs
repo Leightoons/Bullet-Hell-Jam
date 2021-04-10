@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour {
     public Vector2  velocity;
     public float    acceleration;
 
-    public ObjectPool pool;
+    public ObjectPool<Bullet> parentPool;
     private float lifeTime = 2;
     private const float maxLife = 2;
 
@@ -16,12 +16,8 @@ public class Bullet : MonoBehaviour {
             lifeTime -= Time.deltaTime;
         } else {
             lifeTime = maxLife;
-            pool.ReturnToPool(this.gameObject);
+            parentPool.ReturnObject(this);
         }
-    }
-
-    public void SetPool(ObjectPool poolref) {
-        pool = poolref;
     }
 
 }

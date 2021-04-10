@@ -215,8 +215,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2094974691}
-  - component: {fileID: 2094974689}
   - component: {fileID: 2094974690}
+  - component: {fileID: 2094974689}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -233,11 +233,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2094974688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0723dbe00323db042962789972cd0bf8, type: 3}
+  m_Script: {fileID: 11500000, guid: ca039e47db69c5d47adb06c11f261979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _obj: {fileID: 2651704191912397385, guid: 50514912db0192340a4725cf6f3a0a19, type: 3}
-  _poolSize: 0
+  m_prefab: {fileID: 590726358973193997, guid: 50514912db0192340a4725cf6f3a0a19, type: 3}
+  m_size: 5
 --- !u!114 &2094974690
 MonoBehaviour:
   m_ObjectHideFlags: 0

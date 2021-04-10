@@ -2,46 +2,73 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour {
-    public Queue<GameObject> _pool;
-    [SerializeField]
-    public GameObject _obj;
-    [SerializeField]
-    public int _poolSize;
+/// <summary>
+/// A type-safe, generic object pool. This object pool requires you to derive a class from it,
+/// and specify the type of object to pool.
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
+    [Tooltip("Prefab for this object pool")]
+    public T m_prefab;
 
-    public void InitPool(int poolSize) {
-        _pool = new Queue<GameObject>();
+    [Tooltip("Size of this object pool")]
+    public int m_size;
 
-        GameObject _new;
-        for (int i = 0; i < poolSize; i++) {
-            _new = Instantiate<GameObject>(_obj);
-            ImprintPool(_new);
-            _pool.Enqueue(_new);
+    private Queue<T> m_freeList;
+
+    public void Awake() {
+        m_freeList = new Queue<T>();
+
+        // Instantiate the pooled objects and disable them.
+        for (var i = 0; i < m_size; i++) {
+            T _new = InstantiatePooledObject();
         }
-
     }
 
-    public GameObject GetFromPool() {
-
-        if (_pool.Count <= 0) {
-            GameObject _new = Instantiate<GameObject>(_obj);
-            ImprintPool(_new);
-            _pool.Enqueue(_new);
-        }
-
-        GameObject newObject = _pool.Dequeue();
-        newObject.SetActive(true);
-        return newObject;
+    /// <summary>
+    /// Returns an object from the pool. Returns null if there are no more objects free in the pool.
+    /// </summary>
+    /// <returns>Object of type T from the pool.</returns>
+    public virtual T InstantiatePooledObject() {
+        var pooledObject = Instantiate(m_prefab, transform);
+        pooledObject.gameObject.SetActive(false);
+        m_freeList.Enqueue(pooledObject);
+        return pooledObject;
     }
 
-    public void ReturnToPool(GameObject _obj) {
-        _pool.Enqueue(_obj);
-        _obj.SetActive(false);
+
+    /// <summary>
+    /// Returns an object from the pool. Returns null if there are no more objects free in the pool.
+    /// </summary>
+    /// <returns>Object of type T from the pool.</returns>
+    public T Get() {
+        //var numFree = m_freeList.Count;
+        //if (numFree <= 0)
+        //   return null;
+
+        // Pull an object from the end of the free list.
+        var pooledObject = m_freeList.Dequeue();
+        return pooledObject;
     }
 
-    public void ImprintPool(GameObject _obj) {
-        _obj.GetComponent<Bullet>().SetPool(this);
-        Debug.Log("pool set to " + this+" of type "+this.GetType());
+    /// <summary>
+    /// Returns an object to the pool. The object must have been created by this ObjectPool.
+    /// </summary>
+    /// <param name="pooledObject">Object previously obtained from this ObjectPool</param>
+    public void ReturnObject(T pooledObject) {
+        // Put the pooled object back in the free list.
+        m_freeList.Enqueue(pooledObject);
+
+        // Reparent the pooled object to us, and disable it.
+        var pooledObjectTransform = pooledObject.transform;
+        pooledObjectTransform.parent = transform;
+        pooledObjectTransform.localPosition = Vector3.zero;
+        pooledObject.gameObject.SetActive(false);
     }
+}
+
+
+public class ParentPoolTag<T> : MonoBehaviour where T : MonoBehaviour {
+    public ObjectPool<T> m_parentPool{ get; set; }
 
 }
