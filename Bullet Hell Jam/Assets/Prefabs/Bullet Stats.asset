@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d1b51783da827f45ae29d0f75aea044, type: 3}
   m_Name: Bullet Stats
   m_EditorClassIdentifier: 
-  _speed: 0
-  _color: {r: 1, g: 0.1641509, b: 0.6901261, a: 1}
-  maxLife: 2
+  speed: 0
+  color: {r: 1, g: 0.42830187, b: 0.6000701, a: 1}
+  lifeTime: 30
