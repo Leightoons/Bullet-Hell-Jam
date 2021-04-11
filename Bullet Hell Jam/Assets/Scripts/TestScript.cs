@@ -14,7 +14,7 @@ public class TestScript : MonoBehaviour {
 
     IEnumerator TestCoroutine() {
         Bullet[] bList = Bullet.FindObjectsOfType<Bullet>();
-        while (bList.Length + 1 < 5) {
+        while (bList.Length + 1 <= 0) {
             bList = Bullet.FindObjectsOfType<Bullet>();
             NewBullet();
             print("Added new bullet; " + (5 - (bList.Length + 1)) + " until 5 total");
@@ -28,6 +28,10 @@ public class TestScript : MonoBehaviour {
         Bullet _new = _pool.Get();
         _new.gameObject.SetActive(true);
         _new.transform.position = new Vector3(Random.Range(-7.5f, 7.5f), Random.Range(-3.5f, 3.5f), 0);
+        float randomAngle = Random.Range(-180, 180);
+        _new.BulletInit(randomAngle);
+        print(randomAngle);
+        //_new.BulletInit(90 * Mathf.Deg2Rad);
     }
 
 

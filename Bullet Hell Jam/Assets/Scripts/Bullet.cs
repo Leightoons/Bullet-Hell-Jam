@@ -6,8 +6,9 @@ public class Bullet : MonoBehaviour {
 
     public BulletStats bulletStats;
 
-    public Vector2  velocity;
-    private float lifeTimeRemaining;
+    public Vector2  _velocity;
+    public float    _angleDirection;
+    private float   _lifeTimeRemaining;
 
     public ObjectPool<Bullet> parentPool;
 
@@ -15,19 +16,32 @@ public class Bullet : MonoBehaviour {
         // set color
         SpriteRenderer spriteComponent = GetComponent<SpriteRenderer>();
         spriteComponent.color = bulletStats.color;
-        // set lifespan
-        lifeTimeRemaining = bulletStats.lifeTime;
+        spriteComponent.sprite = bulletStats.image;
+        spriteComponent.size = bulletStats.imageScale * Vector2.one;
 
     }
 
     private void Update() {
+        // update position
+        transform.Translate(_velocity * Time.deltaTime, Space.World);
 
-        if (lifeTimeRemaining >= 0) {
-            lifeTimeRemaining -= Time.deltaTime;
+        // Return to pool on lifetime end
+        if (_lifeTimeRemaining >= 0) {
+            _lifeTimeRemaining -= Time.deltaTime;
         } else {
-            lifeTimeRemaining = bulletStats.lifeTime;
+            _lifeTimeRemaining = bulletStats.lifeTime;
             parentPool.ReturnObject(this);
         }
+    }
+
+    public void BulletInit(float angle) {
+        // set lifespan
+        _lifeTimeRemaining = bulletStats.lifeTime;
+        // set velocity
+        _angleDirection = angle;
+        transform.eulerAngles = Vector3.forward * angle;
+        _velocity = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
+        _velocity *= bulletStats.speed;
     }
 
 }
