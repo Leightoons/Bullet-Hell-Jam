@@ -8,19 +8,21 @@ public class TestScript : MonoBehaviour {
 
     void Start() {
         _pool = GetComponent<ObjectPool<Bullet>>();
-
+        //
         StartCoroutine(TestCoroutine());
+        //
+        print("ASPECT RATIO IS " + GameInfo.aspectRatio);
     }
 
     IEnumerator TestCoroutine() {
         Bullet[] bList = Bullet.FindObjectsOfType<Bullet>();
-        while (bList.Length + 1 <= 0) {
+        while (bList.Length + 1 < 5) {
             bList = Bullet.FindObjectsOfType<Bullet>();
             NewBullet();
-            print("Added new bullet; " + (5 - (bList.Length + 1)) + " until 5 total");
+            //print("Added new bullet; " + (5 - (bList.Length + 1)) + " until 5 total");
             yield return new WaitForSeconds(1.5f);
         }
-        print("Coroutine finished");
+        //print("Coroutine finished");
         yield return null;
     }
 
@@ -30,7 +32,7 @@ public class TestScript : MonoBehaviour {
         _new.transform.position = new Vector3(Random.Range(-7.5f, 7.5f), Random.Range(-3.5f, 3.5f), 0);
         float randomAngle = Random.Range(-180, 180);
         _new.BulletInit(randomAngle);
-        print(randomAngle);
+        //print(randomAngle);
         //_new.BulletInit(90 * Mathf.Deg2Rad);
     }
 
