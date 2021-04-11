@@ -9,9 +9,9 @@ public class TestScript : MonoBehaviour {
     void Start() {
         _pool = GetComponent<ObjectPool<Bullet>>();
 
-        Debug.Log("_bool is " + SingletonScriptableObject.Instance._bool);
-        Debug.Log("_float is " + SingletonScriptableObject.Instance._float);
-        Debug.Log("_int is " + SingletonScriptableObject.Instance._int);
+        //Debug.Log("_bool is " + SingletonScriptableObject.Instance._bool);
+        //Debug.Log("_float is " + SingletonScriptableObject.Instance._float);
+        //Debug.Log("_int is " + SingletonScriptableObject.Instance._int);
 
     }
 
