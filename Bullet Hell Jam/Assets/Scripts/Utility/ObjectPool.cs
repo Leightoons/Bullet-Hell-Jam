@@ -18,11 +18,18 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
     [SerializeField]
     private int _size;
 
+    [HideInInspector]
+    public GameObject _poolParent;
+
     private Queue<T> _poolQueue;
 
     #endregion
 
     public void Awake() {
+        // create parent object to store pooled objects, name it after pooled object type and number it
+        _poolParent = new GameObject(typeof(T).ToString() + " Pool "+ GameObject.FindGameObjectsWithTag("Pool Parent").Length);
+        _poolParent.tag = "Pool Parent";
+        // create pool queue
         _poolQueue = new Queue<T>();
         // Instantiate the pooled objects and disable them.
         for (var i = 0; i < _size; i++) {
@@ -38,6 +45,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
     public virtual T InstantiatePooledObject() {
         var pooledObject = Instantiate(_prefab, transform);
         pooledObject.gameObject.SetActive(false);
+        pooledObject.transform.parent = _poolParent.transform;
         _poolQueue.Enqueue(pooledObject);
         return pooledObject;
     }
@@ -65,9 +73,9 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
         _poolQueue.Enqueue(pooledObject);
 
         // Reparent the pooled object to us, and disable it.
-        var pooledObjectTransform = pooledObject.transform;
-        pooledObjectTransform.parent = transform;
-        pooledObjectTransform.localPosition = Vector3.zero;
+        //var pooledObjectTransform = pooledObject.transform;
+        //pooledObjectTransform.parent = transform;
+        //pooledObjectTransform.localPosition = Vector3.zero;
         pooledObject.gameObject.SetActive(false);
     }
 }

@@ -5,9 +5,9 @@ using UnityEngine;
 public class BulletPool : ObjectPool<Bullet> {
 
     public override Bullet InstantiatePooledObject() {
-        Bullet _new = base.InstantiatePooledObject();
-        _new.parentPool = this;
-        return _new;
+        Bullet newBullet = base.InstantiatePooledObject();
+        newBullet.parentPool = this;
+        return newBullet;
     }
 
 }
