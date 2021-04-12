@@ -11,7 +11,8 @@ public class TestScript : MonoBehaviour {
         //
         StartCoroutine(TestCoroutine());
         //
-        print("ASPECT RATIO IS " + GameInfo.aspectRatio);
+        print("ASPECT RATIO IS " + GameManager.AspectRatio);
+        print("CAMERA SCALE IS " + GameManager.CameraScale);
     }
 
     IEnumerator TestCoroutine() {

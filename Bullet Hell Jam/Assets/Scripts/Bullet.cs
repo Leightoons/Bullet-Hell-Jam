@@ -34,8 +34,8 @@ public class Bullet : MonoBehaviour {
         }
 
         // Return to pool if too far from screen
-        if (Mathf.Abs(transform.position.x) > GameInfo.aspectRatio * Camera.main.orthographicSize * 2
-            || Mathf.Abs(transform.position.y) > Camera.main.orthographicSize * 2)
+        if (Mathf.Abs(transform.position.x) > GameManager.AspectRatio * GameManager.CameraScale * 2
+            || Mathf.Abs(transform.position.y) > GameManager.CameraScale * 2)
              {
             _lifeTimeRemaining = bulletStats.lifeTime;
             parentPool.ReturnObject(this);

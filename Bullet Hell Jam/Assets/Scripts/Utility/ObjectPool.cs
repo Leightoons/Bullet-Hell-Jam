@@ -48,7 +48,7 @@ public class ObjectPool<T> : MonoBehaviour where T : MonoBehaviour {
     /// <returns>Object of type T from the pool.</returns>
     public T Get() {
         if (_poolQueue.Count <= 0) {
-            Debug.Log("Pool empty: Instantiating new object into pool");
+            //Debug.Log("Pool empty: Instantiating new object into pool");
             InstantiatePooledObject();
         }
         // Pull an object from the queue.
