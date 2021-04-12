@@ -7,6 +7,7 @@ public struct InputStruct {
     public bool left, right, up, down;
     public float xAxis, yAxis;
     public bool fire;
+    public bool focus;
 
     public void Update() {
         // get directional bools
@@ -17,20 +18,25 @@ public struct InputStruct {
         // calculate axis values
         xAxis = ((right) ? 1 : 0) - ((left) ? 1 : 0);
         yAxis = ((up) ? 1 : 0) - ((down) ? 1 : 0);
-        // get fire button state
-        fire = Input.GetButton("Fire1");
+        // get button states
+        fire  = Input.GetButton("Fire");
+        focus = Input.GetButton("Focus");
     }
 }
 
 public class Player : MonoBehaviour {
 
-    public float speed;
+    public float moveSpeedDefault;
+    public float moveSpeedFocus;
+    //
+    public BoxCollider2D hitBox;
+
 
     private InputStruct _input;
     private Vector2 _velocity;
     //
     [SerializeField]
-    private static float fireCooldown = .5f;
+    private float fireCooldown;
     private float _fireCooldownTimer = 0f;
     //
     private PlayerBulletPool _bulletPool;
@@ -49,7 +55,7 @@ public class Player : MonoBehaviour {
     void PlayerMovement() {
         // get normalized direction vector
         _velocity = new Vector2(_input.xAxis, _input.yAxis).normalized;
-        _velocity *= speed;
+        _velocity *= moveSpeedDefault;
         transform.Translate(_velocity * Time.deltaTime);
     }
 
