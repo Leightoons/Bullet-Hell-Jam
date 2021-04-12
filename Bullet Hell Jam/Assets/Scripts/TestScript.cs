@@ -9,7 +9,7 @@ public class TestScript : MonoBehaviour {
     void Start() {
         _pool = GetComponent<ObjectPool<Bullet>>();
         //
-        StartCoroutine(TestCoroutine());
+        //StartCoroutine(TestCoroutine());
         //
         print("ASPECT RATIO IS " + GameManager.AspectRatio);
         print("CAMERA SCALE IS " + GameManager.CameraScale);

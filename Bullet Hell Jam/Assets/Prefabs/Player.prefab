@@ -100,8 +100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeedDefault: 7
   moveSpeedFocus: 3.5
-  hitBox: {fileID: 7283302052198343705}
+  hitBox: {fileID: 8413502968684253405}
   fireCooldown: 0.25
+  _hitBox: {fileID: 0}
 --- !u!114 &3750865331244120256
 MonoBehaviour:
   m_ObjectHideFlags: 0

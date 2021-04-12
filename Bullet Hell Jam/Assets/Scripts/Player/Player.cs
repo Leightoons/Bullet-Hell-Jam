@@ -29,36 +29,66 @@ public class Player : MonoBehaviour {
     public float moveSpeedDefault;
     public float moveSpeedFocus;
     //
-    public BoxCollider2D hitBox;
+    [SerializeReference]
+    private GameObject hitBox;
 
 
     private InputStruct _input;
     private Vector2 _velocity;
+    //
+    private bool isFocused;
     //
     [SerializeField]
     private float fireCooldown;
     private float _fireCooldownTimer = 0f;
     //
     private PlayerBulletPool _bulletPool;
-    
+    //
+    [HideInInspector]
+    public BoxCollider2D _hitBox;
+    private SpriteRenderer _hitboxSprite;
+    private const float _hitboxOpacityDefault = .3f;
+    private const float _hitboxOpacityFocus   = .75f;
+
 
     void Start() {
-        _bulletPool = GetComponent<PlayerBulletPool>();
+        _hitboxSprite = hitBox.GetComponent<SpriteRenderer>();
+        _hitBox = hitBox.GetComponent<BoxCollider2D>();
+        _bulletPool = GetComponent<PlayerBulletPool>(); // get bullet pool component
     }
 
     void Update() {
         _input.Update();
-        PlayerMovement();
+        HandleFocusInput();
+        //
+        float moveSpeed;
+        Color col = _hitboxSprite.color;
+        if (isFocused) {
+            moveSpeed = moveSpeedFocus;
+            _hitboxSprite.color = new Color(col.r, col.g, col.b, _hitboxOpacityFocus);
+        }
+        else {
+            moveSpeed = moveSpeedDefault;
+            _hitboxSprite.color = new Color(col.r, col.g, col.b, _hitboxOpacityDefault);
+        }
+        //
+        PlayerMovement(moveSpeed);
         HandlePlayerFire();
     }
 
-    void PlayerMovement() {
+    void PlayerMovement(float speed) {
         // get normalized direction vector
         _velocity = new Vector2(_input.xAxis, _input.yAxis).normalized;
-        _velocity *= moveSpeedDefault;
+        _velocity *= speed;
         transform.Translate(_velocity * Time.deltaTime);
     }
 
+    void HandleFocusInput() {
+        if (_input.focus) isFocused = true;
+        else isFocused = false;
+    }
+
+    #region Firing
     void HandlePlayerFire() {
         // increment cooldown
         if (_fireCooldownTimer > 0) _fireCooldownTimer -= Time.deltaTime;
@@ -66,13 +96,11 @@ public class Player : MonoBehaviour {
             OnFireHeld();
         }
     }
-
     void OnFireHeld() {
         if (_fireCooldownTimer <= 0) {
             FireProjectile();
         }
     }
-
     void FireProjectile() {
         _fireCooldownTimer = fireCooldown;
         Bullet newBullet = _bulletPool.Get();
@@ -80,4 +108,5 @@ public class Player : MonoBehaviour {
         newBullet.gameObject.SetActive(true);
         newBullet.BulletInit(0);
     }
+    #endregion
 }
