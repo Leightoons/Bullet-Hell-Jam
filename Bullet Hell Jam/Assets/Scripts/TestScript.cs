@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class TestScript : MonoBehaviour {
 
+    // animation curve testing
+    public AnimationCurve animationCurve;
+    private float _curveTimeCurrent = 0f;
+    private const float _curveMult = 5;
+
     ObjectPool<Bullet> _pool;
 
+    private GameManager gameManager;
+
+
     void Start() {
+        // animation
+        _curveTimeCurrent = 0;
+        gameManager = GetComponent<GameManager>();
+
         _pool = GetComponent<ObjectPool<Bullet>>();
         //
         //StartCoroutine(TestCoroutine());
@@ -40,6 +52,10 @@ public class TestScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        // animation
+        _curveTimeCurrent = (_curveTimeCurrent + (Time.deltaTime*0.3f)) % 1;
+        float curveVal = animationCurve.Evaluate(_curveTimeCurrent) - 0.5f;
+
         if (Input.GetKeyDown(KeyCode.Space)) {
             NewBullet();
         }
